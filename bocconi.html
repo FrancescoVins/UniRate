@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bocconi University - Reviews & Ratings | UniRate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --accent: #ff6b35;
+            --accent-dim: #ff8c5f;
+            --border: #2a2a2a;
+            --gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .logo-uni {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-rate {
+            color: var(--text-primary);
+        }
+
+        .logo-star {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Breadcrumbs */
+        .breadcrumbs {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumbs a:hover {
+            color: var(--accent);
+        }
+
+        .breadcrumbs span {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .uni-hero {
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200') center/cover;
+            display: flex;
+            align-items: flex-end;
+            padding: 3rem 2rem;
+            position: relative;
+        }
+
+        .uni-hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .uni-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .uni-location {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 3rem;
+        }
+
+        /* Overview Section */
+        .overview-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-box {
+            padding: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .rating-large {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stars-large {
+            color: var(--gold);
+            font-size: 2rem;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            margin-top: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            border-color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+        }
+
+        /* Review Card */
+        .review-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .review-card:hover {
+            border-color: var(--accent);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .reviewer-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .reviewer-meta {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            text-align: right;
+        }
+
+        .review-stars {
+            color: var(--gold);
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .review-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .review-content {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .review-categories {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .category-rating {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-name {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .category-stars {
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .review-tags {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .tag-positive, .tag-negative {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .tag-positive {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .tag-negative {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .cta-card {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            color: white;
+        }
+
+        .cta-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-card p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            background: white;
+            color: var(--accent);
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .uni-title {
+                font-size: 2.5rem;
+            }
+
+            .overview-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .review-categories {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="index-en.html" class="logo">
+                <span class="logo-uni">Uni</span><span class="logo-rate">Rate</span>
+                <span class="logo-star">★</span>
+            </a>
+            <div class="nav-links">
+                <a href="index-en.html#universities">Universities</a>
+                <a href="reviews-en.html">All Reviews</a>
+                <a href="index-en.html#how-it-works">How it Works</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Breadcrumbs -->
+    <div class="breadcrumbs">
+        <a href="index-en.html">Home</a>
+        <span>›</span>
+        <a href="index-en.html#universities">Universities</a>
+        <span>›</span>
+        <span>Bocconi</span>
+    </div>
+
+    <!-- Hero -->
+    <div class="uni-hero">
+        <div class="uni-hero-content">
+            <h1 class="uni-title">Bocconi University</h1>
+            <p class="uni-location">📍 Milan, Italy</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Left Column - Reviews -->
+        <div>
+            <!-- Overview Stats -->
+            <div class="overview-section">
+                <div class="overview-stats">
+                    <div class="stat-box">
+                        <div class="rating-large">
+                            <div class="stat-value">4.8</div>
+                            <div class="stars-large">★★★★★</div>
+                        </div>
+                        <div class="stat-label">Overall Rating</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">156</div>
+                        <div class="stat-label">Total Reviews</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Placement Rate</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">#1</div>
+                        <div class="stat-label">Italy Ranking</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="reviews-section">
+                <div class="section-header">
+                    <h2 class="section-title">Student Reviews</h2>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">MBA</button>
+                        <button class="filter-btn">Master</button>
+                        <button class="filter-btn">Bachelor</button>
+                    </div>
+                </div>
+
+                <!-- Review 1 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <h3>Exceptional Business Education</h3>
+                            <p class="reviewer-meta">Sophia L. • MBA • Class of 2024</p>
+                        </div>
+                        <div class="review-rating">
+                            <div class="review-stars">★★★★★</div>
+                            <div class="review-date">December 2025</div>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        One of the best universities in Europe for economics and management. The international prestige is undisputed. Excellent faculty with top-tier publications. Career opportunities are extraordinary, with direct recruiting from the world's best companies. The campus in Milan is modern and the student community is incredibly diverse and talented.
+                    </div>
+                    <div class="review-categories">
+                        <div class="category-rating">
+                            <span class="category-name">📚 Teaching Quality</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">🏛️ Facilities</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">🤝 Networking</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">💼 Career</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                    </div>
+                    <div class="review-tags">
+                        <span class="tag-positive">✓ World-class faculty</span>
+                        <span class="tag-positive">✓ Strong alumni network</span>
+                        <span class="tag-positive">✓ Milan location</span>
+                        <span class="tag-negative">✗ High tuition costs</span>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <h3>Great For Finance & Economics</h3>
+                            <p class="reviewer-meta">Marco R. • MSc Finance • Class of 2023</p>
+                        </div>
+                        <div class="review-rating">
+                            <div class="review-stars">★★★★½</div>
+                            <div class="review-date">August 2025</div>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        Bocconi's finance program is top-notch. Professors are industry leaders and the curriculum is rigorous but rewarding. The career services team is extremely helpful and companies actively recruit on campus. Living in Milan is expensive but the quality of life is excellent. The international environment prepares you well for global careers.
+                    </div>
+                    <div class="review-categories">
+                        <div class="category-rating">
+                            <span class="category-name">📚 Teaching Quality</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">🏛️ Facilities</span>
+                            <span class="category-stars">★★★★☆</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">🤝 Networking</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">💼 Career</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                    </div>
+                    <div class="review-tags">
+                        <span class="tag-positive">✓ Excellent placement</span>
+                        <span class="tag-positive">✓ Diverse cohort</span>
+                        <span class="tag-negative">✗ Competitive environment</span>
+                        <span class="tag-negative">✗ Expensive city</span>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="review-card">
+                    <div class="review-header">
+                        <div class="reviewer-info">
+                            <h3>Rigorous But Worth It</h3>
+                            <p class="reviewer-meta">Anna K. • MSc Marketing • Class of 2025</p>
+                        </div>
+                        <div class="review-rating">
+                            <div class="review-stars">★★★★★</div>
+                            <div class="review-date">June 2025</div>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        The workload is intense but the quality of education justifies it. Bocconi has excellent connections with major companies across Europe. The brand recognition opens doors everywhere. Campus facilities are modern and well-maintained. Student clubs and events create a vibrant community. Highly recommend for anyone serious about business career.
+                    </div>
+                    <div class="review-categories">
+                        <div class="category-rating">
+                            <span class="category-name">📚 Teaching Quality</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">🏛️ Facilities</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">🤝 Networking</span>
+                            <span class="category-stars">★★★★½</span>
+                        </div>
+                        <div class="category-rating">
+                            <span class="category-name">💼 Career</span>
+                            <span class="category-stars">★★★★★</span>
+                        </div>
+                    </div>
+                    <div class="review-tags">
+                        <span class="tag-positive">✓ Brand recognition</span>
+                        <span class="tag-positive">✓ Active student life</span>
+                        <span class="tag-positive">✓ Modern campus</span>
+                        <span class="tag-negative">✗ Heavy workload</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="sidebar">
+            <!-- Quick Facts -->
+            <div class="info-card">
+                <h3>Quick Facts</h3>
+                <div class="info-item">
+                    <span class="info-label">Tuition (Annual)</span>
+                    <span class="info-value">€20-35k</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Students</span>
+                    <span class="info-value">14,000+</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">International %</span>
+                    <span class="info-value">35%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Acceptance Rate</span>
+                    <span class="info-value">25%</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Founded</span>
+                    <span class="info-value">1902</span>
+                </div>
+            </div>
+
+            <!-- Programs -->
+            <div class="info-card">
+                <h3>Popular Programs</h3>
+                <div class="info-item">
+                    <span class="info-label">MBA</span>
+                    <span class="info-value">2 years</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">MSc Finance</span>
+                    <span class="info-value">2 years</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">MSc Marketing</span>
+                    <span class="info-value">2 years</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Bachelor Economics</span>
+                    <span class="info-value">3 years</span>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="cta-card">
+                <h3>Share Your Experience</h3>
+                <p>Studied at Bocconi? Help future students by writing a review!</p>
+                <a href="index-en.html#write-review" class="cta-button">Write Review</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

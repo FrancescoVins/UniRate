@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">University Profile | UniRate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --accent: #ff6b35;
+            --accent-dim: #ff8c5f;
+            --border: #2a2a2a;
+            --gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        header {
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .logo-uni {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-rate { color: var(--text-primary); }
+        .logo-star { color: var(--gold); font-size: 1.2rem; }
+
+        .breadcrumbs {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .breadcrumbs a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .breadcrumbs a:hover { color: var(--accent); }
+
+        .uni-hero {
+            height: 400px;
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1200') center/cover;
+            display: flex;
+            align-items: flex-end;
+            padding: 3rem 2rem;
+        }
+
+        .uni-hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .uni-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .uni-location {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+        }
+
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 3rem;
+        }
+
+        .overview-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .stars-large { color: var(--gold); font-size: 2rem; }
+
+        .reviews-section { margin-top: 2rem; }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .review-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .info-item:last-child { border-bottom: none; }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .no-reviews {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .main-content { grid-template-columns: 1fr; }
+            .uni-title { font-size: 2.5rem; }
+            .overview-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">
+                <span class="logo-uni">Uni</span><span class="logo-rate">Rate</span>
+                <span class="logo-star">★</span>
+            </a>
+        </nav>
+    </header>
+
+    <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>›</span>
+        <a href="index.html#universities">Universities</a>
+        <span>›</span>
+        <span id="breadcrumb-name">Loading...</span>
+    </div>
+
+    <div class="uni-hero" id="hero">
+        <div class="uni-hero-content">
+            <h1 class="uni-title" id="uni-name">Loading...</h1>
+            <p class="uni-location" id="uni-location">📍 Loading...</p>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div>
+            <div class="overview-section" id="overview">
+                <div class="loading">Loading university data...</div>
+            </div>
+
+            <div class="reviews-section" id="reviews-container">
+                <h2 class="section-title">Student Reviews</h2>
+                <div class="loading">Loading reviews...</div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="info-card" id="info-card">
+                <h3>Quick Facts</h3>
+                <div class="loading">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://gdtgazxqkbqdg1ejmfjh.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkdGdhenhxa2JxZGdpZWptZmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMTIyNjIsImV4cCI6MjA4Nzg4ODI2Mn0.D6dMWVJbzTK2qeIb8LabfzKuSRi30TE5XG-IsRc1_i4';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // Get university name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const uniName = urlParams.get('name') || 'bocconi';
+
+        async function loadUniversity() {
+            try {
+                // Fetch university data
+                const { data: uni, error } = await supabase
+                    .from('universities')
+                    .select('*')
+                    .ilike('name', `%${uniName}%`)
+                    .single();
+
+                if (error) throw error;
+
+                // Update page
+                document.getElementById('page-title').textContent = `${uni.name} - Reviews | UniRate`;
+                document.getElementById('uni-name').textContent = uni.name;
+                document.getElementById('breadcrumb-name').textContent = uni.name;
+                document.getElementById('uni-location').textContent = `📍 ${uni.state_province || uni.country}`;
+
+                // Update overview
+                document.getElementById('overview').innerHTML = `
+                    <div class="overview-stats">
+                        <div class="stat-box">
+                            <div class="stat-value">${uni.rating || 'N/A'}</div>
+                            <div class="stars-large">${'★'.repeat(Math.floor(uni.rating || 0))}</div>
+                            <div class="stat-label">Overall Rating</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${uni.review_count || 0}</div>
+                            <div class="stat-label">Total Reviews</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${uni.cost_level || 'N/A'}</div>
+                            <div class="stat-label">Cost Level</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">${uni.country}</div>
+                            <div class="stat-label">Country</div>
+                        </div>
+                    </div>
+                `;
+
+                // Update sidebar
+                document.getElementById('info-card').innerHTML = `
+                    <h3>Quick Facts</h3>
+                    <div class="info-item">
+                        <span class="info-label">Location</span>
+                        <span class="info-value">${uni.state_province || uni.country}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Country</span>
+                        <span class="info-value">${uni.country}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Website</span>
+                        <span class="info-value"><a href="${uni.web_pages?.[0] || '#'}" target="_blank" style="color: var(--accent)">Visit</a></span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Cost Level</span>
+                        <span class="info-value">${uni.cost_level || 'N/A'}</span>
+                    </div>
+                `;
+
+                // Load reviews
+                await loadReviews(uni.id);
+
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('overview').innerHTML = `
+                    <div class="no-reviews">
+                        <h3>University not found</h3>
+                        <p>We couldn't find this university. <a href="index.html">Go back home</a></p>
+                    </div>
+                `;
+            }
+        }
+
+        async function loadReviews(universityId) {
+            try {
+                const { data: reviews, error } = await supabase
+                    .from('reviews')
+                    .select('*')
+                    .eq('university_id', universityId)
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+
+                const container = document.getElementById('reviews-container');
+                
+                if (!reviews || reviews.length === 0) {
+                    container.innerHTML = `
+                        <h2 class="section-title">Student Reviews</h2>
+                        <div class="no-reviews">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                            <h3>No reviews yet</h3>
+                            <p>Be the first to review this university!</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                let html = '<h2 class="section-title">Student Reviews</h2>';
+                
+                reviews.forEach(review => {
+                    const stars = '★'.repeat(Math.floor(review.overall_rating || 0));
+                    html += `
+                        <div class="review-card">
+                            <h3>${review.title || 'Student Review'}</h3>
+                            <div style="color: var(--gold); margin: 1rem 0;">${stars} ${review.overall_rating}/5.0</div>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                                ${review.program_type} • ${review.year_attended}
+                            </p>
+                            <p style="line-height: 1.8;">${review.review_text}</p>
+                            ${review.reviewer_name ? `<p style="margin-top: 1rem; color: var(--text-secondary);">— ${review.reviewer_name}</p>` : ''}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Error loading reviews:', error);
+            }
+        }
+
+        // Load on page load
+        loadUniversity();
+    </script>
+</body>
+</html>

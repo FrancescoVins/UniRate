@@ -1,0 +1,2814 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniRate - Discover & Review the Best Universities</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #f5f5f5;
+            --text-secondary: #a0a0a0;
+            --accent: #ff6b35;
+            --accent-dim: #ff8c5f;
+            --border: #2a2a2a;
+            --gold: #ffd700;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Header e Navigation */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            padding: 1rem 2rem;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .logo-uni {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-rate {
+            color: var(--text-primary);
+        }
+
+        .logo-star {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .cta-button {
+            background: var(--accent);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dim);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            padding: 1rem 2.5rem;
+            border: 2px solid var(--border);
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 4rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .search-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.2rem 4rem 1.2rem 1.5rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-dim);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .popular-searches {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Featured Universities */
+        .featured-section {
+            padding: 6rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .universities-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .uni-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .uni-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2);
+        }
+
+        .uni-image {
+            width: 100%;
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            border-bottom: 1px solid var(--border);
+            position: relative;
+        }
+
+        .uni-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.8) 100%);
+        }
+
+        .uni-image span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .uni-content {
+            padding: 1.5rem;
+        }
+
+        .uni-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .uni-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .uni-location {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .uni-rating {
+            text-align: right;
+        }
+
+        .rating-stars {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .rating-number {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .uni-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 6rem 2rem;
+            background: var(--bg-secondary);
+        }
+
+        .features-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .feature:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .feature p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-box {
+            padding: 2rem;
+        }
+
+        .stat-box-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-box-label {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--accent);
+            padding: 1rem 2.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-section a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 5rem 2rem 4rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+            }
+        }
+
+        /* Review Modal */
+        .review-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .review-modal-overlay.active {
+            display: flex;
+        }
+
+        .review-modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.3);
+        }
+
+        .review-modal-header {
+            padding: 2.5rem 2.5rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg-secondary);
+            z-index: 10;
+        }
+
+        .review-modal-header h2 {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .review-close-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .review-close-btn:hover {
+            color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .review-modal-body {
+            padding: 2.5rem;
+        }
+
+        .review-form-group {
+            margin-bottom: 2rem;
+        }
+
+        .review-form-label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .review-form-required {
+            color: var(--accent);
+            margin-left: 0.3rem;
+        }
+
+        .review-form-input,
+        .review-form-select,
+        .review-form-textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            color: var(--text-primary);
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .review-form-input:focus,
+        .review-form-select:focus,
+        .review-form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(255, 107, 53, 0.1);
+        }
+
+        .review-form-textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .review-form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        /* Rating Stars */
+        .rating-input {
+            display: flex;
+            gap: 0.5rem;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            font-size: 2rem;
+        }
+
+        .rating-input input {
+            display: none;
+        }
+
+        .rating-input label {
+            cursor: pointer;
+            color: #333;
+            transition: all 0.2s ease;
+        }
+
+        .rating-input label:hover,
+        .rating-input label:hover ~ label,
+        .rating-input input:checked ~ label {
+            color: var(--gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            transform: scale(1.1);
+        }
+
+        /* Category Rating Section */
+        .category-ratings {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .category-rating-item {
+            background: var(--bg-primary);
+            padding: 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .category-rating-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .category-rating-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .category-rating-stars {
+            display: flex;
+            gap: 0.3rem;
+            font-size: 1.5rem;
+        }
+
+        /* Pros and Cons */
+        .pros-cons-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .pros-cons-section {
+            background: var(--bg-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .pros-cons-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .pros-header {
+            color: #4ade80;
+        }
+
+        .cons-header {
+            color: #f87171;
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tag-item {
+            background: var(--bg-secondary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .tag-remove:hover {
+            color: var(--accent);
+        }
+
+        .tag-input {
+            padding: 0.6rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            border-radius: 20px;
+            width: 100%;
+        }
+
+        .tag-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Submit Button */
+        .review-submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            border: none;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .review-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(255, 107, 53, 0.4);
+        }
+
+        .review-submit-btn:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Helper Text */
+        .helper-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .review-form-row,
+            .pros-cons-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .review-modal {
+                margin: 1rem;
+            }
+
+            .review-modal-body {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Onboarding Modal */
+        .onboarding-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .onboarding-overlay.active {
+            display: flex;
+        }
+
+        .onboarding-modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            padding: 3rem;
+            position: relative;
+            animation: slideInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 60px rgba(255, 107, 53, 0.2);
+        }
+
+        .onboarding-close {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .onboarding-close:hover {
+            color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+            transform: rotate(90deg);
+        }
+
+        .onboarding-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .onboarding-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dim) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3);
+        }
+
+        .onboarding-header h3 {
+            font-family: 'Work Sans', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .onboarding-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .onboarding-options {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            padding: 1.2rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+        }
+
+        .option-card:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+            background: rgba(255, 107, 53, 0.05);
+        }
+
+        .option-card.selected {
+            border-color: var(--accent);
+            background: rgba(255, 107, 53, 0.1);
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.2);
+        }
+
+        .option-card.selected::after {
+            content: '✓';
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--accent);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .option-icon {
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+
+        .option-text {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-primary);
+            flex-grow: 1;
+        }
+
+        .onboarding-footer {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .onboarding-btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .onboarding-btn-skip {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border);
+        }
+
+        .onboarding-btn-skip:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        .onboarding-btn-continue {
+            background: var(--accent);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .onboarding-btn-continue:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4);
+        }
+
+        .onboarding-btn-continue:disabled {
+            background: var(--border);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .selection-count {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .onboarding-modal {
+                padding: 2rem 1.5rem;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+
+            .onboarding-footer {
+                flex-direction: column;
+            }
+        }
+
+        /* AI Assistant Chat Widget */
+        .ai-assistant-widget {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 9999;
+        }
+
+        .ai-chat-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ai-chat-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.6);
+        }
+
+        .ai-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #10b981;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 3px solid var(--bg-primary);
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        .ai-chat-window {
+            position: fixed;
+            bottom: 6rem;
+            right: 2rem;
+            width: 420px;
+            height: 650px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideInUp 0.3s ease-out;
+        }
+
+        .ai-chat-window.active {
+            display: flex;
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+            padding: 1.2rem 1.5rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-chat-header-info {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .ai-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .ai-header-text h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .ai-status {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .ai-status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .ai-chat-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-chat-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .ai-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: var(--bg-primary);
+        }
+
+        .ai-message {
+            display: flex;
+            gap: 0.8rem;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .ai-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .ai-message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .ai-message.assistant .ai-message-avatar {
+            background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+
+        .ai-message.user .ai-message-avatar {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+        }
+
+        .ai-message-content {
+            max-width: 75%;
+            padding: 0.9rem 1.2rem;
+            border-radius: 12px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .ai-message.assistant .ai-message-content {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .ai-message.user .ai-message-content {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        .ai-typing {
+            display: flex;
+            gap: 0.4rem;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        .ai-typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s ease-in-out infinite;
+        }
+
+        .ai-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .ai-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+            30% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        .ai-chat-input-area {
+            padding: 1rem 1.5rem;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+
+        .ai-suggestions {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .ai-suggestion-chip {
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ai-suggestion-chip:hover {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .ai-input-wrapper {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            padding: 0.9rem 1.2rem;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .ai-chat-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .ai-send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #8b5cf6;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-send-btn:hover:not(:disabled) {
+            background: #a78bfa;
+            transform: scale(1.05);
+        }
+
+        .ai-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .ai-university-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 0.8rem;
+        }
+
+        .ai-uni-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .ai-uni-rating {
+            color: var(--gold);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-uni-details {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .ai-match-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .ai-chat-window {
+                width: calc(100vw - 2rem);
+                height: calc(100vh - 8rem);
+                right: 1rem;
+                bottom: 5rem;
+            }
+
+            .ai-assistant-widget {
+                bottom: 1.5rem;
+                right: 1.5rem;
+            }
+
+            .ai-chat-button {
+                width: 55px;
+                height: 55px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <a href="#" class="logo">
+                <span class="logo-uni">Uni</span><span class="logo-rate">Rate</span>
+                <span class="logo-star">★</span>
+            </a>
+            <div class="nav-links">
+                <a href="#universities">Universities</a>
+                <a href="reviews-en.html">Reviews</a>
+                <a href="#how-it-works">How it Works</a>
+                <a href="#" class="cta-button">Write Review</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content animate-in">
+            <h1>Find Your Perfect University</h1>
+            <p>Discover authentic reviews from students and alumni of the world's best universities. Make informed decisions about your academic future.</p>
+            <div class="hero-buttons">
+                <a href="#universities" class="btn-primary">Explore Universities</a>
+                <a href="#" class="btn-secondary" id="openReviewModal">Write Review</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Search Section -->
+    <section class="search-section" id="universities">
+        <div class="search-container">
+            <h2>Search Your University</h2>
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Search universities, programs, cities...">
+                <button class="search-btn">🔍</button>
+            </div>
+            <div class="popular-searches">
+                <span class="tag">🇮🇹 Italy</span>
+                <span class="tag">🇺🇸 USA</span>
+                <span class="tag">🇬🇧 UK</span>
+                <span class="tag">Business</span>
+                <span class="tag">Engineering</span>
+                <span class="tag">Medicine</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Universities -->
+    <section class="featured-section">
+        <div class="section-header">
+            <h2>Featured Universities</h2>
+            <p>The most reviewed and appreciated universities by the community</p>
+        </div>
+        <div class="universities-grid">
+            <a href="bocconi.html" class="uni-card">
+                <div class="uni-image" style="background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=400&fit=crop');">
+                    <span>🏛️</span>
+                </div>
+                <div class="uni-content">
+                    <div class="uni-header">
+                        <div>
+                            <div class="uni-name">Bocconi</div>
+                            <div class="uni-location">📍 Milan, Italy</div>
+                        </div>
+                        <div class="uni-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <div class="rating-number">4.8</div>
+                        </div>
+                    </div>
+                    <div class="uni-stats">
+                        <div class="stat">
+                            <div class="stat-value">156</div>
+                            <div class="stat-label">Reviews</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Placement</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">#1</div>
+                            <div class="stat-label">Italy</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="harvard.html" class="uni-card">
+                <div class="uni-image" style="background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?w=600&h=400&fit=crop');">
+                    <span>🎓</span>
+                </div>
+                <div class="uni-content">
+                    <div class="uni-header">
+                        <div>
+                            <div class="uni-name">Harvard</div>
+                            <div class="uni-location">📍 Boston, USA</div>
+                        </div>
+                        <div class="uni-rating">
+                            <div class="rating-stars">★★★★★</div>
+                            <div class="rating-number">5.0</div>
+                        </div>
+                    </div>
+                    <div class="uni-stats">
+                        <div class="stat">
+                            <div class="stat-value">892</div>
+                            <div class="stat-label">Reviews</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">99%</div>
+                            <div class="stat-label">Placement</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">#1</div>
+                            <div class="stat-label">World</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="luiss.html" class="uni-card">
+                <div class="uni-image" style="background-image: url('https://images.unsplash.com/photo-1564981797816-1043664bf78d?w=600&h=400&fit=crop');">
+                    <span>🏢</span>
+                </div>
+                <div class="uni-content">
+                    <div class="uni-header">
+                        <div>
+                            <div class="uni-name">LUISS</div>
+                            <div class="uni-location">📍 Rome, Italy</div>
+                        </div>
+                        <div class="uni-rating">
+                            <div class="rating-stars">★★★★½</div>
+                            <div class="rating-number">4.5</div>
+                        </div>
+                    </div>
+                    <div class="uni-stats">
+                        <div class="stat">
+                            <div class="stat-value">124</div>
+                            <div class="stat-label">Reviews</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">95%</div>
+                            <div class="stat-label">Placement</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">#3</div>
+                            <div class="stat-label">Italy</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <a href="fudan.html" class="uni-card">
+                <div class="uni-image" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=600&h=400&fit=crop');">
+                    <span>🌏</span>
+                </div>
+                <div class="uni-content">
+                    <div class="uni-header">
+                        <div>
+                            <div class="uni-name">Fudan</div>
+                            <div class="uni-location">📍 Shanghai, China</div>
+                        </div>
+                        <div class="uni-rating">
+                            <div class="rating-stars">★★★★</div>
+                            <div class="rating-number">4.3</div>
+                        </div>
+                    </div>
+                    <div class="uni-stats">
+                        <div class="stat">
+                            <div class="stat-value">78</div>
+                            <div class="stat-label">Reviews</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">92%</div>
+                            <div class="stat-label">Placement</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">#4</div>
+                            <div class="stat-label">Asia</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section" id="how-it-works">
+        <div class="section-header">
+            <h2>Why UniRate?</h2>
+            <p>The most comprehensive platform for choosing your university</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">✍️</div>
+                <h3>Authentic Reviews</h3>
+                <p>Read real opinions from students and alumni who experienced it firsthand.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Detailed Data</h3>
+                <p>Ratings on teaching quality, facilities, networking and career opportunities.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌍</div>
+                <h3>Global Database</h3>
+                <p>Thousands of universities from around the world, from the most prestigious to hidden gems.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Advanced Filters</h3>
+                <p>Find the perfect university by filtering by country, program, ranking and more.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">💬</div>
+                <h3>Active Community</h3>
+                <p>Connect with students and alumni, ask questions and share your experience.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🆓</div>
+                <h3>Completely Free</h3>
+                <p>Unlimited access to all reviews and features, no hidden costs.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="section-header">
+            <h2>UniRate in Numbers</h2>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-box-number">2,500+</div>
+                <div class="stat-box-label">University</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-number">15,000+</div>
+                <div class="stat-box-label">Reviews</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-number">50+</div>
+                <div class="stat-box-label">Countries</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-box-number">100K+</div>
+                <div class="stat-box-label">Users</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Ready to Find Your University?</h2>
+        <p>Join thousands of students who have already found their ideal path thanks to UniRate</p>
+        <a href="#universities" class="btn-white">Start Now</a>
+    </section>
+
+    <!-- Review Modal -->
+    <div class="review-modal-overlay" id="reviewModal">
+        <div class="review-modal">
+            <div class="review-modal-header">
+                <h2>Write a Review</h2>
+                <button class="review-close-btn" id="closeReviewModal">&times;</button>
+            </div>
+            <div class="review-modal-body">
+                <form id="reviewForm">
+                    <!-- University Selection -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">
+                            Università <span class="review-form-required">*</span>
+                        </label>
+                        <select class="review-form-select" id="universitySelect" required>
+                            <option value="">Select university</option>
+                            <option value="bocconi">🏛️ Bocconi - Milano, Italia</option>
+                            <option value="luiss">🏢 LUISS Business School - Roma, Italia</option>
+                            <option value="harvard">🎓 Harvard Business School - Boston, USA</option>
+                            <option value="stanford">🌟 Stanford University - California, USA</option>
+                            <option value="mit">🔬 MIT - Massachusetts, USA</option>
+                            <option value="oxford">📚 Oxford University - Oxford, UK</option>
+                            <option value="cambridge">🎯 Cambridge University - Cambridge, UK</option>
+                            <option value="lse">💼 LSE - London, UK</option>
+                            <option value="fudan">🌏 Fudan University - Shanghai, Cina</option>
+                            <option value="tsinghua">🏗️ Tsinghua University - Beijing, Cina</option>
+                            <option value="nus">🌴 National University of Singapore - Singapore</option>
+                            <option value="polimi">⚙️ Politecnico di Milano - Milano, Italia</option>
+                            <option value="sapienza">🏛️ Sapienza Università di Roma - Roma, Italia</option>
+                        </select>
+                    </div>
+
+                    <!-- Program and Year -->
+                    <div class="review-form-row">
+                        <div class="review-form-group">
+                            <label class="review-form-label">
+                                Programma <span class="review-form-required">*</span>
+                            </label>
+                            <select class="review-form-select" id="programSelect" required>
+                                <option value="">Select program</option>
+                                <option value="mba">MBA</option>
+                                <option value="master">Master / MSc</option>
+                                <option value="bachelor">Bachelor / Laurea Triennale</option>
+                                <option value="phd">PhD / Dottorato</option>
+                                <option value="executive">Executive Program</option>
+                                <option value="summer">Summer School</option>
+                            </select>
+                        </div>
+                        <div class="review-form-group">
+                            <label class="review-form-label">
+                                Anno di Frequenza <span class="review-form-required">*</span>
+                            </label>
+                            <select class="review-form-select" id="yearSelect" required>
+                                <option value="">Select year</option>
+                                <option value="2026">2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                                <option value="2023">2023</option>
+                                <option value="2022">2022</option>
+                                <option value="2021">2021</option>
+                                <option value="2020">2020</option>
+                                <option value="pre-2020">Before 2020</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Overall Rating -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">
+                            Valutazione Complessiva <span class="review-form-required">*</span>
+                        </label>
+                        <div class="rating-input" id="overallRating">
+                            <input type="radio" name="overall" value="5" id="overall5" required>
+                            <label for="overall5">★</label>
+                            <input type="radio" name="overall" value="4" id="overall4">
+                            <label for="overall4">★</label>
+                            <input type="radio" name="overall" value="3" id="overall3">
+                            <label for="overall3">★</label>
+                            <input type="radio" name="overall" value="2" id="overall2">
+                            <label for="overall2">★</label>
+                            <input type="radio" name="overall" value="1" id="overall1">
+                            <label for="overall1">★</label>
+                        </div>
+                    </div>
+
+                    <!-- Category Ratings -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">Detailed Ratings</label>
+                        <div class="category-ratings">
+                            <div class="category-rating-item">
+                                <div class="category-rating-header">
+                                    <span class="category-rating-name">📚 Teaching Quality</span>
+                                </div>
+                                <div class="rating-input category-rating-stars">
+                                    <input type="radio" name="teaching" value="5" id="teaching5">
+                                    <label for="teaching5">★</label>
+                                    <input type="radio" name="teaching" value="4" id="teaching4">
+                                    <label for="teaching4">★</label>
+                                    <input type="radio" name="teaching" value="3" id="teaching3">
+                                    <label for="teaching3">★</label>
+                                    <input type="radio" name="teaching" value="2" id="teaching2">
+                                    <label for="teaching2">★</label>
+                                    <input type="radio" name="teaching" value="1" id="teaching1">
+                                    <label for="teaching1">★</label>
+                                </div>
+                            </div>
+
+                            <div class="category-rating-item">
+                                <div class="category-rating-header">
+                                    <span class="category-rating-name">🏛️ Facilities & Services</span>
+                                </div>
+                                <div class="rating-input category-rating-stars">
+                                    <input type="radio" name="facilities" value="5" id="facilities5">
+                                    <label for="facilities5">★</label>
+                                    <input type="radio" name="facilities" value="4" id="facilities4">
+                                    <label for="facilities4">★</label>
+                                    <input type="radio" name="facilities" value="3" id="facilities3">
+                                    <label for="facilities3">★</label>
+                                    <input type="radio" name="facilities" value="2" id="facilities2">
+                                    <label for="facilities2">★</label>
+                                    <input type="radio" name="facilities" value="1" id="facilities1">
+                                    <label for="facilities1">★</label>
+                                </div>
+                            </div>
+
+                            <div class="category-rating-item">
+                                <div class="category-rating-header">
+                                    <span class="category-rating-name">🤝 Networking & Community</span>
+                                </div>
+                                <div class="rating-input category-rating-stars">
+                                    <input type="radio" name="networking" value="5" id="networking5">
+                                    <label for="networking5">★</label>
+                                    <input type="radio" name="networking" value="4" id="networking4">
+                                    <label for="networking4">★</label>
+                                    <input type="radio" name="networking" value="3" id="networking3">
+                                    <label for="networking3">★</label>
+                                    <input type="radio" name="networking" value="2" id="networking2">
+                                    <label for="networking2">★</label>
+                                    <input type="radio" name="networking" value="1" id="networking1">
+                                    <label for="networking1">★</label>
+                                </div>
+                            </div>
+
+                            <div class="category-rating-item">
+                                <div class="category-rating-header">
+                                    <span class="category-rating-name">💼 Career Opportunities</span>
+                                </div>
+                                <div class="rating-input category-rating-stars">
+                                    <input type="radio" name="career" value="5" id="career5">
+                                    <label for="career5">★</label>
+                                    <input type="radio" name="career" value="4" id="career4">
+                                    <label for="career4">★</label>
+                                    <input type="radio" name="career" value="3" id="career3">
+                                    <label for="career3">★</label>
+                                    <input type="radio" name="career" value="2" id="career2">
+                                    <label for="career2">★</label>
+                                    <input type="radio" name="career" value="1" id="career1">
+                                    <label for="career1">★</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Review Title -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">
+                            Titolo della Recensione <span class="review-form-required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            class="review-form-input" 
+                            id="reviewTitle" 
+                            placeholder="e.g., An experience that changed my life"
+                            maxlength="100"
+                            required
+                        >
+                        <p class="helper-text">Maximum 100 characters</p>
+                    </div>
+
+                    <!-- Review Content -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">
+                            La Tua Esperienza <span class="review-form-required">*</span>
+                        </label>
+                        <textarea 
+                            class="review-form-textarea" 
+                            id="reviewContent" 
+                            placeholder="Share your experience in detail. What did you like most? What would you improve? How was the academic journey?"
+                            required
+                        ></textarea>
+                        <p class="helper-text">Minimum 100 characters for a complete review</p>
+                    </div>
+
+                    <!-- Pros and Cons -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">Pros and Cons</label>
+                        <div class="pros-cons-grid">
+                            <div class="pros-cons-section">
+                                <div class="pros-header">✅ Positive Aspects</div>
+                                <div class="tag-input-container" id="prosTags"></div>
+                                <input 
+                                    type="text" 
+                                    class="tag-input" 
+                                    id="prosInput" 
+                                    placeholder="Press Enter to add"
+                                >
+                            </div>
+                            <div class="pros-cons-section">
+                                <div class="cons-header">❌ Negative Aspects</div>
+                                <div class="tag-input-container" id="consTags"></div>
+                                <input 
+                                    type="text" 
+                                    class="tag-input" 
+                                    id="consInput" 
+                                    placeholder="Press Enter to add"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Your Name -->
+                    <div class="review-form-group">
+                        <label class="review-form-label">
+                            Il Tuo Nome <span class="review-form-required">*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            class="review-form-input" 
+                            id="reviewerName" 
+                            placeholder="e.g., John D."
+                            required
+                        >
+                        <p class="helper-text">You can use only initials for privacy</p>
+                    </div>
+
+                    <button type="submit" class="review-submit-btn">Publish Review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Onboarding Modal -->
+    <div class="onboarding-overlay" id="onboardingModal">
+        <div class="onboarding-modal">
+            <button class="onboarding-close" id="closeOnboarding">&times;</button>
+            
+            <div class="onboarding-header">
+                <div class="onboarding-icon">UR</div>
+                <h3>"What stands out most?"</h3>
+                <p class="onboarding-subtitle">Pick 3 things that matter most when choosing a university</p>
+            </div>
+
+            <div class="onboarding-options" id="onboardingOptions">
+                <div class="option-card" data-value="academics">
+                    <div class="option-icon">🔥</div>
+                    <div class="option-text">Strong academics</div>
+                </div>
+                <div class="option-card" data-value="career">
+                    <div class="option-icon">💼</div>
+                    <div class="option-text">Career opportunities</div>
+                </div>
+                <div class="option-card" data-value="international">
+                    <div class="option-icon">🌍</div>
+                    <div class="option-text">International exposure</div>
+                </div>
+                <div class="option-card" data-value="social">
+                    <div class="option-icon">🎉</div>
+                    <div class="option-text">Social life</div>
+                </div>
+                <div class="option-card" data-value="expensive">
+                    <div class="option-icon">💎</div>
+                    <div class="option-text">Expensive</div>
+                </div>
+                <div class="option-card" data-value="workload">
+                    <div class="option-icon">📚</div>
+                    <div class="option-text">Intense workload</div>
+                </div>
+                <div class="option-card" data-value="community">
+                    <div class="option-icon">🤝</div>
+                    <div class="option-text">Great community</div>
+                </div>
+                <div class="option-card" data-value="facilities">
+                    <div class="option-icon">🏛️</div>
+                    <div class="option-text">Weak facilities</div>
+                </div>
+            </div>
+
+            <div class="onboarding-footer">
+                <button class="onboarding-btn onboarding-btn-skip" id="skipOnboarding">Skip</button>
+                <button class="onboarding-btn onboarding-btn-continue" id="continueOnboarding" disabled>
+                    Continue <span class="selection-count" id="selectionCount">0/3</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>UniRate</h4>
+                <p style="color: var(--text-secondary);">The reference platform for authentic and reliable university reviews.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="#universities">Universities</a></li>
+                    <li><a href="reviews-en.html">Reviews</a></li>
+                    <a href="#how-it-works">How it Works</a></li>
+                    <li><a href="#">Rankings</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Community</h4>
+                <ul>
+                    <li><a href="#">Write Review</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Newsletter</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="#">FAQ</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 UniRate. Tutti i diritti riservati.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Review Modal Logic
+        const reviewModal = document.getElementById('reviewModal');
+        const openReviewModalBtn = document.getElementById('openReviewModal');
+        const closeReviewModalBtn = document.getElementById('closeReviewModal');
+        const reviewForm = document.getElementById('reviewForm');
+        
+        let prosArray = [];
+        let consArray = [];
+
+        // Open review modal
+        openReviewModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            reviewModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Close review modal
+        function closeReviewModal() {
+            reviewModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        closeReviewModalBtn.addEventListener('click', closeReviewModal);
+
+        reviewModal.addEventListener('click', (e) => {
+            if (e.target === reviewModal) {
+                closeReviewModal();
+            }
+        });
+
+        // Pros/Cons tag management
+        const prosInput = document.getElementById('prosInput');
+        const consInput = document.getElementById('consInput');
+        const prosTagsContainer = document.getElementById('prosTags');
+        const consTagsContainer = document.getElementById('consTags');
+
+        function addTag(input, array, container, type) {
+            const value = input.value.trim();
+            if (value && !array.includes(value)) {
+                array.push(value);
+                renderTags(array, container, type);
+                input.value = '';
+            }
+        }
+
+        function removeTag(index, array, container, type) {
+            array.splice(index, 1);
+            renderTags(array, container, type);
+        }
+
+        function renderTags(array, container, type) {
+            container.innerHTML = '';
+            array.forEach((tag, index) => {
+                const tagEl = document.createElement('div');
+                tagEl.className = 'tag-item';
+                tagEl.innerHTML = `
+                    <span>${tag}</span>
+                    <span class="tag-remove" onclick="removeTag${type}(${index})">×</span>
+                `;
+                container.appendChild(tagEl);
+            });
+        }
+
+        window.removeTagPros = (index) => removeTag(index, prosArray, prosTagsContainer, 'Pros');
+        window.removeTagCons = (index) => removeTag(index, consArray, consTagsContainer, 'Cons');
+
+        prosInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTag(prosInput, prosArray, prosTagsContainer, 'Pros');
+            }
+        });
+
+        consInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addTag(consInput, consArray, consTagsContainer, 'Cons');
+            }
+        });
+
+        // Form submission
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const formData = {
+                university: document.getElementById('universitySelect').value,
+                program: document.getElementById('programSelect').value,
+                year: document.getElementById('yearSelect').value,
+                overallRating: document.querySelector('input[name="overall"]:checked')?.value,
+                ratings: {
+                    teaching: document.querySelector('input[name="teaching"]:checked')?.value || 0,
+                    facilities: document.querySelector('input[name="facilities"]:checked')?.value || 0,
+                    networking: document.querySelector('input[name="networking"]:checked')?.value || 0,
+                    career: document.querySelector('input[name="career"]:checked')?.value || 0
+                },
+                title: document.getElementById('reviewTitle').value,
+                content: document.getElementById('reviewContent').value,
+                pros: prosArray,
+                cons: consArray,
+                name: document.getElementById('reviewerName').value,
+                timestamp: new Date().toISOString()
+            };
+
+            console.log('Review submitted:', formData);
+            
+            // Save to localStorage
+            const existingReviews = JSON.parse(localStorage.getItem('userReviews') || '[]');
+            existingReviews.push(formData);
+            localStorage.setItem('userReviews', JSON.stringify(existingReviews));
+
+            // Show success message
+            alert('✅ Review published successfully! Thank you for your contribution.');
+            
+            // Reset form and close modal
+            reviewForm.reset();
+            prosArray = [];
+            consArray = [];
+            renderTags(prosArray, prosTagsContainer, 'Pros');
+            renderTags(consArray, consTagsContainer, 'Cons');
+            closeReviewModal();
+        });
+
+        // CTA button in header
+        document.querySelectorAll('.cta-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                reviewModal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Onboarding Modal Logic
+        const onboardingModal = document.getElementById('onboardingModal');
+        const closeOnboarding = document.getElementById('closeOnboarding');
+        const skipOnboarding = document.getElementById('skipOnboarding');
+        const continueOnboarding = document.getElementById('continueOnboarding');
+        const selectionCount = document.getElementById('selectionCount');
+        const options = document.querySelectorAll('.option-card');
+        
+        let selectedOptions = [];
+        const MAX_SELECTIONS = 3;
+
+        // Onboarding modal will be shown when user clicks signup/create profile
+        // Removed auto-popup on page load
+
+        // Close modal
+        function closeModal() {
+            onboardingModal.classList.remove('active');
+        }
+
+        closeOnboarding.addEventListener('click', closeModal);
+        skipOnboarding.addEventListener('click', closeModal);
+
+        // Click outside to close
+        onboardingModal.addEventListener('click', (e) => {
+            if (e.target === onboardingModal) {
+                closeModal();
+            }
+        });
+
+        // Option selection
+        options.forEach(option => {
+            option.addEventListener('click', () => {
+                const value = option.dataset.value;
+                
+                if (option.classList.contains('selected')) {
+                    // Deselect
+                    option.classList.remove('selected');
+                    selectedOptions = selectedOptions.filter(v => v !== value);
+                } else {
+                    // Select (if under max)
+                    if (selectedOptions.length < MAX_SELECTIONS) {
+                        option.classList.add('selected');
+                        selectedOptions.push(value);
+                    }
+                }
+
+                // Update count and button state
+                selectionCount.textContent = `${selectedOptions.length}/${MAX_SELECTIONS}`;
+                continueOnboarding.disabled = selectedOptions.length !== MAX_SELECTIONS;
+            });
+        });
+
+        // Continue button
+        continueOnboarding.addEventListener('click', () => {
+            console.log('User preferences:', selectedOptions);
+            // Qui salveresti le preferenze dell'utente
+            localStorage.setItem('userPreferences', JSON.stringify(selectedOptions));
+            closeModal();
+            
+            // Optional: show success message
+            alert('Preferences saved! Now we can personalize your suggestions.');
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Search functionality - WORKING VERSION
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        const uniCards = document.querySelectorAll('.uni-card');
+        const tags = document.querySelectorAll('.tag');
+
+        function filterUniversities(query) {
+            const searchTerm = query.toLowerCase().trim();
+            let visibleCount = 0;
+
+            uniCards.forEach(card => {
+                const name = card.querySelector('.uni-name').textContent.toLowerCase();
+                const location = card.querySelector('.uni-location').textContent.toLowerCase();
+                
+                // Check if search term matches name or location
+                if (name.includes(searchTerm) || location.includes(searchTerm) || searchTerm === '') {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // Show "no results" message if needed
+            const grid = document.querySelector('.universities-grid');
+            let noResults = grid.querySelector('.no-results');
+            
+            if (visibleCount === 0) {
+                if (!noResults) {
+                    noResults = document.createElement('div');
+                    noResults.className = 'no-results';
+                    noResults.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);';
+                    noResults.innerHTML = `
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">No universities found</h3>
+                        <p>Try a different search term or browse all universities</p>
+                    `;
+                    grid.appendChild(noResults);
+                }
+                noResults.style.display = 'block';
+            } else if (noResults) {
+                noResults.style.display = 'none';
+            }
+        }
+
+        // Search on input
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                filterUniversities(e.target.value);
+            });
+
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    filterUniversities(e.target.value);
+                }
+            });
+        }
+
+        // Search button click
+        if (searchBtn) {
+            searchBtn.addEventListener('click', () => {
+                if (searchInput) {
+                    filterUniversities(searchInput.value);
+                }
+            });
+        }
+
+        // Tag clicks - filter by country/category
+        tags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                const tagText = tag.textContent.trim();
+                let searchTerm = '';
+                
+                // Map tags to search terms
+                if (tagText.includes('Italy')) searchTerm = 'italy';
+                else if (tagText.includes('USA')) searchTerm = 'usa';
+                else if (tagText.includes('UK')) searchTerm = 'uk';
+                else if (tagText.includes('China')) searchTerm = 'china';
+                else searchTerm = tagText.toLowerCase();
+                
+                searchInput.value = searchTerm;
+                filterUniversities(searchTerm);
+                
+                // Scroll to universities section
+                document.querySelector('#universities').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Original search functionality (console logging)
+
+        // Animate cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.uni-card, .feature, .stat-box').forEach(el => {
+            observer.observe(el);
+        });
+
+        // AI Assistant Logic
+        const aiChatButton = document.getElementById('aiChatButton');
+        const aiChatWindow = document.getElementById('aiChatWindow');
+        const aiChatClose = document.getElementById('aiChatClose');
+        const aiChatInput = document.getElementById('aiChatInput');
+        const aiSendBtn = document.getElementById('aiSendBtn');
+        const aiChatMessages = document.getElementById('aiChatMessages');
+        const aiSuggestions = document.querySelectorAll('.ai-suggestion-chip');
+
+        // Toggle chat window
+        if (aiChatButton) {
+            aiChatButton.addEventListener('click', () => {
+                console.log('Chat button clicked');
+                aiChatWindow.classList.toggle('active');
+                if (aiChatWindow.classList.contains('active')) {
+                    aiChatInput.focus();
+                }
+            });
+        }
+
+        if (aiChatClose) {
+            aiChatClose.addEventListener('click', () => {
+                aiChatWindow.classList.remove('active');
+            });
+        }
+
+        // AI Knowledge Base
+        const universities = {
+            bocconi: {
+                name: "Bocconi",
+                location: "Milano, Italia",
+                rating: 4.8,
+                strengths: ["Qualità insegnamento eccellente", "Top-tier global network", "98% placement record"],
+                programs: ["MBA", "MSc Finance", "MSc Marketing"],
+                tuition: "€20,000-35,000/anno"
+            },
+            luiss: {
+                name: "LUISS Business School",
+                location: "Roma, Italia",
+                rating: 4.5,
+                strengths: ["Strong corporate connections", "Modern campus", "Focus on leadership"],
+                programs: ["MBA", "Executive MBA", "Master"],
+                tuition: "€18,000-28,000/anno"
+            },
+            harvard: {
+                name: "Harvard Business School",
+                location: "Boston, USA",
+                rating: 5.0,
+                strengths: ["Unmatched network", "Case method", "Global brand"],
+                programs: ["MBA", "Executive Education"],
+                tuition: "$75,000-80,000/anno"
+            },
+            stanford: {
+                name: "Stanford GSB",
+                location: "California, USA",
+                rating: 5.0,
+                strengths: ["Innovation hub", "Silicon Valley access", "Entrepreneurship focus"],
+                programs: ["MBA", "MSx", "PhD"],
+                tuition: "$77,000/anno"
+            },
+            fudan: {
+                name: "Fudan University",
+                location: "Shanghai, Cina",
+                rating: 4.3,
+                strengths: ["Gateway per mercati asiatici", "Growing prestige", "Competitive costs"],
+                programs: ["IMBA", "MBA", "EMBA"],
+                tuition: "¥200,000-300,000/anno"
+            },
+            polimi: {
+                name: "Politecnico di Milano",
+                location: "Milano, Italia",
+                rating: 4.6,
+                strengths: ["Engineering excellence", "Design leadership", "Industry partnerships"],
+                programs: ["MSc Engineering", "MBA", "Design programs"],
+                tuition: "€3,900-15,000/anno"
+            }
+        };
+
+        // Enhanced AI Response Generator with Claude-like responses
+        function generateAIResponse(userMessage) {
+            const message = userMessage.toLowerCase();
+            
+            // Greeting
+            if (message.includes('ciao') || message.includes('hello') || message.includes('hey')) {
+                return {
+                    text: "Ciao! Sono qui per aiutarti a trovare l'università perfetta per il tuo percorso. Hai già un'idea di cosa vorresti studiare o preferisci che ti faccia qualche domanda per capire meglio le tue esigenze?"
+                };
+            }
+
+            // MBA queries
+            if (message.includes('mba')) {
+                if (message.includes('italia') || message.includes('italian')) {
+                    return {
+                        text: "Per MBA in Italia, ti consiglio di guardare principalmente a Bocconi e LUISS. La Bocconi ha un network internazionale straordinario e un placement record del 98% - praticamente garantito che troverai lavoro. LUISS invece è fortissima nelle connessioni con le aziende italiane, soprattutto se vuoi rimanere a lavorare in Italia.\n\nChe tipo di carriera hai in mente dopo l'MBA?",
+                        universities: ['bocconi', 'luiss']
+                    };
+                }
+                if (message.includes('miglior') || message.includes('top')) {
+                    return {
+                        text: "Se guardiamo ai migliori MBA a livello globale, Harvard rimane il gold standard - il network che costruisci lì vale praticamente quanto il titolo stesso. Ma considera anche che Stanford ha un focus incredibile sull'imprenditorialità se ti interessa il tech.\n\nIn Italia, Bocconi è decisamente al top e ha un ottimo rapporto qualità-prezzo rispetto alle americane.",
+                        universities: ['harvard', 'stanford', 'bocconi']
+                    };
+                }
+                return {
+                    text: "Gli MBA sono investimenti importanti. Alcune domande che ti aiuteranno a scegliere:\n\n• Vuoi rimanere in Europa o sei disposto ad andare negli USA?\n• Qual è il tuo budget approssimativo?\n• Ti interessa più la finanza, il tech, o il management generale?\n\nIn base a questo posso darti suggerimenti più mirati!"
+                };
+            }
+
+            // Tech/Engineering queries
+            if (message.includes('tech') || message.includes('tecnologia') || message.includes('ingegneria') || message.includes('computer')) {
+                return {
+                    text: "Per tech e ingegneria, il Politecnico di Milano è eccellente e ha un costo molto più accessibile rispetto alle università americane. Se invece vuoi il massimo livello e hai budget, Stanford è praticamente nel cuore della Silicon Valley - le opportunità di networking con startup e tech companies sono imbattibili.\n\nChe area specifica del tech ti interessa? AI, software, hardware, design?",
+                    universities: ['polimi', 'stanford']
+                };
+            }
+
+            // Asia/International queries
+            if (message.includes('asia') || message.includes('cina') || message.includes('internazional') || message.includes('shanghai')) {
+                return {
+                    text: "Fudan è un'ottima scelta se vuoi entrare nei mercati asiatici. Shanghai è un hub economico incredibile e l'università ha ottimi collegamenti con le aziende cinesi e internazionali che operano in Asia. I costi sono anche molto più competitivi rispetto a Europa o USA.\n\nSe invece vuoi un'esposizione internazionale più globale, Harvard o Bocconi hanno studenti da tutto il mondo.",
+                        universities: ['fudan', 'harvard', 'bocconi']
+                };
+            }
+
+            // Scholarships/Funding
+            if (message.includes('borsa') || message.includes('scholarship') || message.includes('finanziament') || message.includes('aiuto')) {
+                return {
+                    text: "Le borse di studio sono fondamentali! Ecco cosa devi sapere:\n\n• **Bocconi e LUISS**: Offrono borse al merito che possono coprire fino al 50-100% della retta. Devi candidarti presto e avere un buon profilo accademico.\n\n• **Harvard**: Ha un sistema di financial aid molto generoso basato sul reddito familiare. Se la tua famiglia guadagna meno di $85k/anno, è praticamente gratis.\n\n• **Polimi**: Essendo pubblica, ha già rette basse (€3,900 per italiani/EU), più borse regionali.\n\nTi consiglio di guardare anche le borse Fulbright se vuoi andare negli USA!"
+                };
+            }
+
+            // Budget/Cost queries
+            if (message.includes('cost') || message.includes('prezzo') || message.includes('budget') || message.includes('quanto costa')) {
+                return {
+                    text: "Parliamo di soldi! 💰 Ecco un confronto realistico:\n\n**Italia:**\n• Bocconi: €20-35k/anno (MBA)\n• LUISS: €18-28k/anno\n• Polimi: €3,900-15k/anno (molto più basso!)\n\n**USA:**\n• Harvard/Stanford: ~$75-80k/anno solo la retta, poi aggiungi $30-40k per vivere a Boston/Palo Alto\n\n**Asia:**\n• Fudan: ¥200-300k/anno (~€25-40k)\n\nLe università italiane hanno un rapporto qualità-prezzo eccezionale, specialmente se consideri che costi di vita a Milano/Roma sono più bassi di Boston o San Francisco."
+                };
+            }
+
+            // Placement/Career
+            if (message.includes('lavoro') || message.includes('carriera') || message.includes('placement') || message.includes('opportunità')) {
+                return {
+                    text: "Il placement è cruciale! Ecco i dati:\n\n• **Harvard**: 99% placement entro 3 mesi, salary medio $175k\n• **Bocconi**: 98% placement, salary medio €65-80k in Italia, molto più alto se vai all'estero\n• **LUISS**: ~95% placement, ottimi collegamenti con aziende italiane e consulting firms\n\nMa ricorda: il placement dipende anche da cosa VUOI fare. Se punti a McKinsey o Goldman Sachs, Harvard/Bocconi sono ideali. Se vuoi startups tech, Stanford. Se vuoi rimanere in Italia in posizioni corporate, LUISS è perfetta.",
+                        universities: ['harvard', 'bocconi', 'luiss']
+                };
+            }
+
+            // Comparison queries
+            if (message.includes('confronta') || message.includes('differenza') || message.includes('meglio') || message.includes('vs')) {
+                return {
+                    text: "Ottima domanda! Per fare un confronto utile, dimmi:\n\n• Quali università stai considerando?\n• Cosa è più importante per te: prestigio del brand, costo, location, specializzazione?\n\nPosso darti un'analisi dettagliata una volta che so cosa ti interessa di più!"
+                };
+            }
+
+            // Design/Creative queries
+            if (message.includes('design') || message.includes('creativ') || message.includes('arte')) {
+                return {
+                    text: "Per design, il Politecnico di Milano è letteralmente tra i migliori al mondo - Milano è la capitale mondiale del design! Hanno programmi eccellenti in design del prodotto, service design, e fashion design.\n\nSe vuoi un mix tra design e tech/business, Stanford ha programmi interessanti di design thinking.",
+                        universities: ['polimi', 'stanford']
+                };
+            }
+
+            // General help
+            if (message.includes('aiut') || message.includes('consiglio') || message.includes('suggest')) {
+                return {
+                    text: "Certo che posso aiutarti! Per darti i consigli migliori, dimmi qualcosa di più su di te:\n\n• Che cosa hai studiato finora?\n• Quali sono i tuoi obiettivi di carriera?\n• Hai un budget in mente?\n• Preferisci rimanere in Italia/Europa o sei aperto a USA/Asia?\n\nPiù dettagli mi dai, più posso essere preciso nei suggerimenti!"
+                };
+            }
+
+            // Default - more helpful response
+            return {
+                text: "Interessante! Per aiutarti meglio, potresti dirmi:\n\n• Che tipo di programma ti interessa? (MBA, Master, Bachelor...)\n• Quale settore/industria ti appassiona?\n• Hai vincoli di budget o location?\n\nOppure prova a chiedermi cose tipo: 'Migliori MBA in Italia', 'Quanto costa Harvard', 'Borse di studio disponibili', etc."
+            };
+        }
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `ai-message ${isUser ? 'user' : 'assistant'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="ai-message-avatar">${isUser ? '👤' : '🤖'}</div>
+                <div class="ai-message-content">${content}</div>
+            `;
+            
+            aiChatMessages.appendChild(messageDiv);
+            aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+        }
+
+        function addUniversityCard(uniKey) {
+            const uni = universities[uniKey];
+            if (!uni) return;
+
+            const cardHTML = `
+                <div class="ai-university-card">
+                    <div class="ai-uni-name">
+                        ${uni.name}
+                        <span class="ai-match-badge">${Math.floor(uni.rating * 20)}% Match</span>
+                    </div>
+                    <div class="ai-uni-rating">${'★'.repeat(Math.floor(uni.rating))}${'☆'.repeat(5-Math.floor(uni.rating))} ${uni.rating}/5.0</div>
+                    <div class="ai-uni-details">
+                        📍 ${uni.location}<br>
+                        💰 ${uni.tuition}<br>
+                        ✨ ${uni.strengths.slice(0, 2).join(' • ')}
+                    </div>
+                </div>
+            `;
+            
+            const lastMessage = aiChatMessages.lastElementChild;
+            const content = lastMessage.querySelector('.ai-message-content');
+            content.innerHTML += cardHTML;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-message assistant';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="ai-message-avatar">🤖</div>
+                <div class="ai-typing">
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                    <div class="ai-typing-dot"></div>
+                </div>
+            `;
+            aiChatMessages.appendChild(typingDiv);
+            aiChatMessages.scrollTop = aiChatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+
+        async function sendMessage() {
+            const message = aiChatInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, true);
+            aiChatInput.value = '';
+            aiSendBtn.disabled = true;
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Simulate AI thinking delay (more realistic)
+            await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
+
+            // Generate response
+            const response = generateAIResponse(message);
+            
+            // Remove typing indicator
+            removeTypingIndicator();
+
+            // Add AI response
+            addMessage(response.text, false);
+
+            // Add university cards if any
+            if (response.universities) {
+                await new Promise(resolve => setTimeout(resolve, 400));
+                response.universities.forEach(uniKey => {
+                    addUniversityCard(uniKey);
+                });
+            }
+
+            aiSendBtn.disabled = false;
+            aiChatInput.focus();
+        }
+
+        // Send message on button click
+        if (aiSendBtn) {
+            aiSendBtn.addEventListener('click', sendMessage);
+        }
+
+        // Send message on Enter key
+        if (aiChatInput) {
+            aiChatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+
+        // Suggestion chips
+        aiSuggestions.forEach(chip => {
+            chip.addEventListener('click', () => {
+                aiChatInput.value = chip.textContent;
+                sendMessage();
+            });
+        });
+    </script>
+    <!-- AI Assistant Widget -->
+    <div class="ai-assistant-widget">
+        <div class="ai-chat-window" id="aiChatWindow">
+            <div class="ai-chat-header">
+                <div class="ai-chat-header-info">
+                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-header-text">
+                        <h3>UniRate AI Assistant</h3>
+                        <div class="ai-status">
+                            <span class="ai-status-dot"></span>
+                            Online
+                        </div>
+                    </div>
+                </div>
+                <button class="ai-chat-close" id="aiChatClose">×</button>
+            </div>
+
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message assistant">
+                    <div class="ai-message-avatar">🤖</div>
+                    <div class="ai-message-content">
+                        Ciao! 👋 Sono il tuo assistente AI per trovare l'università perfetta. Posso aiutarti a:
+                        <br><br>
+                        • Scoprire università in base alle tue preferenze<br>
+                        • Confrontare programmi e costi<br>
+                        • Trovare borse di studio<br>
+                        • Rispondere a domande specifiche<br>
+                        <br>
+                        Come posso aiutarti oggi?
+                    </div>
+                </div>
+            </div>
+
+            <div class="ai-chat-input-area">
+                <div class="ai-suggestions" id="aiSuggestions">
+                    <div class="ai-suggestion-chip">Best MBAs in Italy</div>
+                    <div class="ai-suggestion-chip">Universities for tech</div>
+                    <div class="ai-suggestion-chip">Scholarships</div>
+                </div>
+                <div class="ai-input-wrapper">
+                    <input 
+                        type="text" 
+                        class="ai-chat-input" 
+                        id="aiChatInput" 
+                        placeholder="Write your question..."
+                    >
+                    <button class="ai-send-btn" id="aiSendBtn">
+                        ➤
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="ai-chat-button" id="aiChatButton">
+            🤖
+            <span class="ai-badge"></span>
+        </button>
+    </div>
+
+</body>
+</html>
