@@ -260,23 +260,26 @@
 
     <script>
         // Supabase configuration
-        const SUPABASE_URL = 'https://gdtgazxqkbqdg1ejmfjh.supabase.co';
+        const SUPABASE_URL = 'https://gdtgazxqkbqdgiejmfjh.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkdGdhenhxa2JxZGdpZWptZmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMTIyNjIsImV4cCI6MjA4Nzg4ODI2Mn0.D6dMWVJbzTK2qeIb8LabfzKuSRi30TE5XG-IsRc1_i4';
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // Get university name from URL
+        // Get university from URL (supports ?slug=bocconi or ?name=Bocconi)
         const urlParams = new URLSearchParams(window.location.search);
+        const uniSlug = urlParams.get('slug') || null;
         const uniName = urlParams.get('name') || 'bocconi';
 
         async function loadUniversity() {
             try {
-                // Fetch university data
-                const { data: uni, error } = await supabase
-                    .from('universities')
-                    .select('*')
-                    .ilike('name', `%${uniName}%`)
-                    .single();
+                // Fetch university data (by slug preferred, fallback to name)
+                let query = supabase.from('universities').select('*');
+                if (uniSlug) {
+                    query = query.eq('slug', uniSlug);
+                } else {
+                    query = query.ilike('name', `%${uniName}%`);
+                }
+                const { data: uni, error } = await query.single();
 
                 if (error) throw error;
 
@@ -284,7 +287,7 @@
                 document.getElementById('page-title').textContent = `${uni.name} - Reviews | UniRate`;
                 document.getElementById('uni-name').textContent = uni.name;
                 document.getElementById('breadcrumb-name').textContent = uni.name;
-                document.getElementById('uni-location').textContent = `📍 ${uni.state_province || uni.country}`;
+                document.getElementById('uni-location').textContent = `📍 ${uni.city || uni.country}`;
 
                 // Update overview
                 document.getElementById('overview').innerHTML = `
@@ -295,18 +298,19 @@
                             <div class="stat-label">Overall Rating</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-value">${uni.review_count || 0}</div>
+                            <div class="stat-value">${uni.reviews_count || 0}</div>
                             <div class="stat-label">Total Reviews</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-value">${uni.cost_level || 'N/A'}</div>
-                            <div class="stat-label">Cost Level</div>
+                            <div class="stat-value">${uni.placement_rate != null ? uni.placement_rate + '%' : 'N/A'}</div>
+                            <div class="stat-label">Placement</div>
                         </div>
                         <div class="stat-box">
-                            <div class="stat-value">${uni.country}</div>
-                            <div class="stat-label">Country</div>
+                            <div class="stat-value">${uni.ranking_label || uni.country}</div>
+                            <div class="stat-label">Ranking</div>
                         </div>
                     </div>
+                    ${uni.description ? `<p style="margin-top:1.5rem;color:var(--text-secondary);line-height:1.8">${uni.description}</p>` : ''}
                 `;
 
                 // Update sidebar
@@ -314,19 +318,19 @@
                     <h3>Quick Facts</h3>
                     <div class="info-item">
                         <span class="info-label">Location</span>
-                        <span class="info-value">${uni.state_province || uni.country}</span>
+                        <span class="info-value">${uni.city || ''}, ${uni.country || ''}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Tuition</span>
+                        <span class="info-value">${uni.tuition || 'N/A'}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Programs</span>
+                        <span class="info-value">${(uni.programs || []).slice(0, 3).join(', ')}</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Country</span>
                         <span class="info-value">${uni.country}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Website</span>
-                        <span class="info-value"><a href="${uni.web_pages?.[0] || '#'}" target="_blank" style="color: var(--accent)">Visit</a></span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Cost Level</span>
-                        <span class="info-value">${uni.cost_level || 'N/A'}</span>
                     </div>
                 `;
 

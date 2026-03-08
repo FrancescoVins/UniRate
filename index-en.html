@@ -1540,7 +1540,65 @@
                 height: 55px;
             }
         }
+        /* Search Results Section */
+        .search-results-section {
+            padding: 3rem 2rem 2rem;
+            background: var(--bg-primary);
+        }
+
+        .search-results-header {
+            max-width: 1400px;
+            margin: 0 auto 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-results-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .search-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .search-results-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .search-loading {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .search-no-results {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .tag.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: white;
+        }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <!-- Header -->
@@ -1590,8 +1648,17 @@
         </div>
     </section>
 
+    <!-- Search Results (Supabase live results) -->
+    <section class="search-results-section" id="searchResultsSection" style="display:none">
+        <div class="search-results-header">
+            <h3 id="searchResultsTitle">Search Results</h3>
+            <span class="search-count" id="searchResultsCount"></span>
+        </div>
+        <div id="searchResultsGrid" class="search-results-grid"></div>
+    </section>
+
     <!-- Featured Universities -->
-    <section class="featured-section">
+    <section class="featured-section" id="featuredSection">
         <div class="section-header">
             <h2>Featured Universities</h2>
             <p>The most reviewed and appreciated universities by the community</p>
@@ -2354,90 +2421,180 @@
             });
         });
 
-        // Search functionality - WORKING VERSION
-        const searchInput = document.querySelector('.search-input');
-        const searchBtn = document.querySelector('.search-btn');
-        const uniCards = document.querySelectorAll('.uni-card');
-        const tags = document.querySelectorAll('.tag');
+        // ── Supabase Real-Time Search ──────────────────────────────
+        const SUPABASE_URL = 'https://gdtgazxqkbqdgiejmfjh.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkdGdhenhxa2JxZGdpZWptZmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMTIyNjIsImV4cCI6MjA4Nzg4ODI2Mn0.D6dMWVJbzTK2qeIb8LabfzKuSRi30TE5XG-IsRc1_i4';
+        const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function filterUniversities(query) {
-            const searchTerm = query.toLowerCase().trim();
-            let visibleCount = 0;
+        const searchInput   = document.querySelector('.search-input');
+        const searchBtn     = document.querySelector('.search-btn');
+        const tags          = document.querySelectorAll('.tag');
+        const resultsSection = document.getElementById('searchResultsSection');
+        const resultsGrid   = document.getElementById('searchResultsGrid');
+        const resultsTitle  = document.getElementById('searchResultsTitle');
+        const resultsCount  = document.getElementById('searchResultsCount');
+        const featuredSection = document.getElementById('featuredSection');
 
-            uniCards.forEach(card => {
-                const name = card.querySelector('.uni-name').textContent.toLowerCase();
-                const location = card.querySelector('.uni-location').textContent.toLowerCase();
-                
-                // Check if search term matches name or location
-                if (name.includes(searchTerm) || location.includes(searchTerm) || searchTerm === '') {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+        let activeTag = null;   // current active tag filter
+        let debounceTimer = null;
 
-            // Show "no results" message if needed
-            const grid = document.querySelector('.universities-grid');
-            let noResults = grid.querySelector('.no-results');
-            
-            if (visibleCount === 0) {
-                if (!noResults) {
-                    noResults = document.createElement('div');
-                    noResults.className = 'no-results';
-                    noResults.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 3rem; color: var(--text-secondary);';
-                    noResults.innerHTML = `
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
-                        <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">No universities found</h3>
-                        <p>Try a different search term or browse all universities</p>
-                    `;
-                    grid.appendChild(noResults);
-                }
-                noResults.style.display = 'block';
-            } else if (noResults) {
-                noResults.style.display = 'none';
+        // Build a university card HTML from a DB row
+        function buildCard(uni) {
+            const stars = '★'.repeat(Math.floor(uni.rating || 0)) + '☆'.repeat(5 - Math.floor(uni.rating || 0));
+            const programs = (uni.programs || []).slice(0, 3).join(' · ');
+            return `
+                <a href="university.html?slug=${uni.slug || ''}&name=${encodeURIComponent(uni.name)}" class="uni-card">
+                    <div class="uni-image" style="background:linear-gradient(135deg,#1a1a1a 0%,#2a2a2a 100%);">
+                        <span>${uni.emoji || '🎓'}</span>
+                    </div>
+                    <div class="uni-content">
+                        <div class="uni-header">
+                            <div>
+                                <div class="uni-name">${uni.name}</div>
+                                <div class="uni-location">📍 ${uni.city || ''}, ${uni.country || ''}</div>
+                            </div>
+                            <div class="uni-rating">
+                                <div class="rating-stars" style="color:var(--gold);font-size:0.9rem">${stars}</div>
+                                <div class="rating-number">${uni.rating || 'N/A'}</div>
+                            </div>
+                        </div>
+                        <p style="color:var(--text-secondary);font-size:0.85rem;margin:0.5rem 0;line-height:1.4">${uni.description ? uni.description.slice(0, 100) + '…' : ''}</p>
+                        <div class="uni-stats">
+                            <div class="stat">
+                                <div class="stat-value">${uni.reviews_count || 0}</div>
+                                <div class="stat-label">Reviews</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${uni.placement_rate != null ? uni.placement_rate + '%' : 'N/A'}</div>
+                                <div class="stat-label">Placement</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${uni.ranking_label || ''}</div>
+                                <div class="stat-label">Rank</div>
+                            </div>
+                        </div>
+                        ${programs ? `<p style="margin-top:0.8rem;font-size:0.8rem;color:var(--text-secondary)">${programs}</p>` : ''}
+                    </div>
+                </a>`;
+        }
+
+        function showLoading() {
+            resultsSection.style.display = 'block';
+            featuredSection.style.display = 'none';
+            resultsGrid.innerHTML = '<div class="search-loading">🔍 Searching…</div>';
+        }
+
+        function showResults(rows, label) {
+            resultsTitle.textContent = label || 'Search Results';
+            resultsCount.textContent = `${rows.length} universit${rows.length === 1 ? 'y' : 'ies'} found`;
+            if (rows.length === 0) {
+                resultsGrid.innerHTML = `
+                    <div class="search-no-results" style="grid-column:1/-1">
+                        <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
+                        <h3>No universities found</h3>
+                        <p style="color:var(--text-secondary)">Try a different search term or filter</p>
+                    </div>`;
+            } else {
+                resultsGrid.innerHTML = rows.map(buildCard).join('');
             }
         }
 
-        // Search on input
+        function hideResults() {
+            resultsSection.style.display = 'none';
+            featuredSection.style.display = 'block';
+            resultsCount.textContent = '';
+        }
+
+        // Core Supabase query
+        async function querySupabase(text, countryFilter, categoryFilter) {
+            let query = sb.from('universities').select('*').order('rating', { ascending: false });
+
+            if (text && text.trim()) {
+                query = query.ilike('name', `%${text.trim()}%`);
+            }
+            if (countryFilter) {
+                query = query.ilike('country', `%${countryFilter}%`);
+            }
+            if (categoryFilter) {
+                query = query.contains('category', [categoryFilter]);
+            }
+
+            const { data, error } = await query.limit(30);
+            if (error) { console.error('Supabase error:', error); return []; }
+            return data || [];
+        }
+
+        async function performSearch() {
+            const text = searchInput ? searchInput.value.trim() : '';
+            const hasText    = text.length > 0;
+            const hasTag     = activeTag !== null;
+
+            if (!hasText && !hasTag) {
+                hideResults();
+                return;
+            }
+
+            showLoading();
+
+            let countryFilter = null, categoryFilter = null;
+            let label = 'Search Results';
+
+            if (hasTag) {
+                const tagText = activeTag.textContent.trim();
+                if (tagText.includes('Italy'))      { countryFilter = 'Italy';      label = '🇮🇹 Italian Universities'; }
+                else if (tagText.includes('USA'))   { countryFilter = 'USA';        label = '🇺🇸 US Universities'; }
+                else if (tagText.includes('UK'))    { countryFilter = 'UK';         label = '🇬🇧 UK Universities'; }
+                else if (tagText.includes('Business'))    { categoryFilter = 'Business';    label = '📊 Business Schools'; }
+                else if (tagText.includes('Engineering')) { categoryFilter = 'Engineering'; label = '⚙️ Engineering Universities'; }
+                else if (tagText.includes('Medicine'))    { categoryFilter = 'Medicine';    label = '🏥 Medical Universities'; }
+                else { countryFilter = tagText; label = tagText + ' Universities'; }
+            }
+
+            if (hasText && label === 'Search Results') {
+                label = `Results for "${text}"`;
+            }
+
+            const rows = await querySupabase(text, countryFilter, categoryFilter);
+            showResults(rows, label);
+        }
+
+        // Search input with 400ms debounce
         if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                filterUniversities(e.target.value);
+            searchInput.addEventListener('input', () => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(performSearch, 400);
             });
 
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') {
-                    filterUniversities(e.target.value);
+                    clearTimeout(debounceTimer);
+                    performSearch();
                 }
             });
         }
 
-        // Search button click
         if (searchBtn) {
             searchBtn.addEventListener('click', () => {
-                if (searchInput) {
-                    filterUniversities(searchInput.value);
-                }
+                clearTimeout(debounceTimer);
+                performSearch();
             });
         }
 
-        // Tag clicks - filter by country/category
+        // Tag clicks — filter by country/category
         tags.forEach(tag => {
             tag.addEventListener('click', () => {
-                const tagText = tag.textContent.trim();
-                let searchTerm = '';
-                
-                // Map tags to search terms
-                if (tagText.includes('Italy')) searchTerm = 'italy';
-                else if (tagText.includes('USA')) searchTerm = 'usa';
-                else if (tagText.includes('UK')) searchTerm = 'uk';
-                else if (tagText.includes('China')) searchTerm = 'china';
-                else searchTerm = tagText.toLowerCase();
-                
-                searchInput.value = searchTerm;
-                filterUniversities(searchTerm);
-                
-                // Scroll to universities section
+                if (activeTag === tag) {
+                    // Deactivate tag
+                    tag.classList.remove('active');
+                    activeTag = null;
+                } else {
+                    tags.forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    activeTag = tag;
+                }
+                if (searchInput) searchInput.value = '';
+                clearTimeout(debounceTimer);
+                performSearch();
                 document.querySelector('#universities').scrollIntoView({ behavior: 'smooth' });
             });
         });
